@@ -5,9 +5,12 @@ declare global {
 		id: number;
 		message: string;
 		created_at: string;
+		user_id: string;
 	};
 
 	type NewMessage = Omit<Message, 'id' | 'created_at'>;
+
+	type MutateMessage = Omit<NewMessage, 'user_id'>;
 
 	namespace App {
 		// interface Error {}
