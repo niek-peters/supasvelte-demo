@@ -12,6 +12,15 @@ declare global {
 
 	type MutateMessage = Omit<NewMessage, 'user_id'>;
 
+	type BroadcastMessage = {
+		uuid: string;
+		message: string;
+	};
+
+	type NewBroadcastMessage = Omit<BroadcastMessage, 'uuid'>;
+
+	type MutateBroadcastMessage = Omit<BroadcastMessage, 'uuid'>;
+
 	namespace App {
 		// interface Error {}
 		// interface Locals {}

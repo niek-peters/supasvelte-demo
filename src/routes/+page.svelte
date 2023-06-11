@@ -2,14 +2,18 @@
 	import '../app.css';
 	import { fade } from 'svelte/transition';
 	import { supabase } from '../hooks';
-	import { getStore } from '$lib/stores/supabaseStore';
+	import { getStore } from '$lib/stores/tableStore';
 	import type { Session } from '@supabase/supabase-js';
 	import { onMount } from 'svelte';
+	// import { getBroadcastStore } from '$lib/stores/broadcastStore';
 
 	let session: Session | null = null;
 
 	// #region Messages
-	const messages = getStore<Message, NewMessage, MutateMessage>(supabase, 'messages');
+	const messages = getStore<Message, NewMessage, MutateMessage>(supabase, 'messages', {
+		indexName: 'id',
+		mutateInterval: 10000
+	});
 
 	let message = '';
 	async function addMessage() {
@@ -78,6 +82,27 @@
 
 		session = (await supabase.auth.getSession()).data.session;
 	}
+	// #endregion
+
+	// #region Broadcast
+	// const messagesBroadcast = getBroadcastStore<BroadcastMessage>(
+	// 	supabase,
+	// 	'messages',
+	// 	[],
+	// 	async () => {
+	// 		const uuid1 = await messagesBroadcast.add({
+	// 			message: 'test2'
+	// 		});
+
+	// 		const uuid2 = await messagesBroadcast.add({
+	// 			message: 'test3'
+	// 		});
+
+	// 		if (uuid1) messagesBroadcast.remove(uuid1);
+	// 		if (uuid2) messagesBroadcast.mutate(uuid2, { message: 'new' });
+	// 	}
+	// );
+
 	// #endregion
 </script>
 
@@ -172,7 +197,13 @@
 				{/each}
 			</section>
 		</main>
+		<!-- <section class="relative text-white px-8 py-4">
+			{#each $messagesBroadcast as message}
+				<p>{message.message}</p>
+			{/each}
+		</section> -->
 	</div>
+
 	{#if overlay}
 		<div
 			transition:fade={{ duration: 150 }}
