@@ -2,15 +2,14 @@
 	import '../app.css';
 	import { fade } from 'svelte/transition';
 	import { supabase } from '../hooks';
-	import { getStore } from '$lib/stores/tableStore';
+	import { getTableStore } from '$lib/TableStore';
 	import type { Session } from '@supabase/supabase-js';
 	import { onMount } from 'svelte';
-	// import { getBroadcastStore } from '$lib/stores/broadcastStore';
 
 	let session: Session | null = null;
 
 	// #region Messages
-	const messages = getStore<Message, NewMessage, MutateMessage>(supabase, 'messages', {
+	const messages = getTableStore<Message, NewMessage, MutateMessage>(supabase, 'messages', {
 		indexName: 'id',
 		mutateInterval: 10000
 	});
